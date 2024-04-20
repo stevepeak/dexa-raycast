@@ -2,7 +2,6 @@ import { ActionPanel, clearSearchBar, Icon, List } from "@raycast/api";
 import { v4 as uuidv4 } from "uuid";
 import { DestructiveAction, PrimaryAction, TextToSpeechAction } from "../actions";
 import { CopyActionSection } from "../actions/copy";
-import { FormInputActionSection } from "../actions/form-input";
 import { PreferencesActionSection } from "../actions/preferences";
 import { SaveActionSection } from "../actions/save";
 import { DEFAULT_MODEL } from "../hooks/useModel";
@@ -17,9 +16,6 @@ export const ChatView = ({
   model,
   setConversation,
   use,
-  models,
-  selectedModel,
-  onModelChange,
 }: ChatViewProps) => {
   const savedChat = useSavedChat();
 
@@ -38,13 +34,6 @@ export const ChatView = ({
           </ActionPanel.Section>
         </>
       ) : null}
-      <FormInputActionSection
-        initialQuestion={question}
-        onSubmit={(question) => use.chats.ask(question, model)}
-        models={models}
-        selectedModel={selectedModel}
-        onModelChange={onModelChange}
-      />
       {use.chats.data.length > 0 && (
         <ActionPanel.Section title="Restart">
           <DestructiveAction

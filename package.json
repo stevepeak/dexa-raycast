@@ -62,15 +62,6 @@
       "required": false
     },
     {
-      "name": "isAutoFullInput",
-      "label": "Enable full text input initially",
-      "description": "Use full text input form when asking question for the first time",
-      "type": "checkbox",
-      "title": "Use Full Text Input",
-      "default": false,
-      "required": false
-    },
-    {
       "name": "isAutoTTS",
       "label": "Enable text-to-speech for every response",
       "description": "Enable auto TTS everytime you get a generated answer",

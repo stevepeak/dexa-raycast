@@ -1,8 +1,7 @@
-import { ActionPanel, getPreferenceValues, List, useNavigation } from "@raycast/api";
+import { ActionPanel, List } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryAction } from "./actions";
-import { FormInputActionSection } from "./actions/form-input";
 import { PreferencesActionSection } from "./actions/preferences";
 import { useChat } from "./hooks/useChat";
 import { useConversations } from "./hooks/useConversations";
@@ -11,7 +10,6 @@ import { useQuestion } from "./hooks/useQuestion";
 import { Chat, Conversation, Model } from "./type";
 import { ChatView } from "./views/chat";
 import { ModelDropdown } from "./views/model/dropdown";
-import { QuestionForm } from "./views/question/form";
 
 export default function Ask(props: { conversation?: Conversation }) {
   const conversations = useConversations();
@@ -31,40 +29,11 @@ export default function Ask(props: { conversation?: Conversation }) {
     }
   );
 
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [isLoading] = useState<boolean>(true);
 
   const [selectedModelId, setSelectedModelId] = useState<string>(
     props.conversation ? props.conversation.model.id : "default"
   );
-
-  const [isAutoFullInput] = useState(() => {
-    return getPreferenceValues<{
-      isAutoFullInput: string;
-    }>().isAutoFullInput;
-  });
-
-  const { push, pop } = useNavigation();
-
-  useEffect(() => {
-    if (
-      isAutoFullInput &&
-      (conversation.chats.length === 0 || (conversation.chats.length > 0 && question.data.length > 0))
-    ) {
-      push(
-        <QuestionForm
-          initialQuestion={question.data}
-          onSubmit={(question) => {
-            chats.ask(question, conversation.model), pop();
-          }}
-          models={models.data}
-          selectedModel={selectedModelId}
-          onModelChange={setSelectedModelId}
-        />
-      );
-    }
-
-    setLoading(false);
-  }, [question.data]);
 
   useEffect(() => {
     if (props.conversation?.id !== conversation.id || conversations.data.length === 0) {
@@ -100,13 +69,6 @@ export default function Ask(props: { conversation?: Conversation }) {
   const getActionPanel = (question: string, model: Model) => (
     <ActionPanel>
       <PrimaryAction title="Get Answer" onAction={() => chats.ask(question, model)} />
-      <FormInputActionSection
-        initialQuestion={question}
-        onSubmit={(question) => chats.ask(question, model)}
-        models={models.data}
-        selectedModel={selectedModelId}
-        onModelChange={setSelectedModelId}
-      />
       <PreferencesActionSection />
     </ActionPanel>
   );
@@ -123,13 +85,6 @@ export default function Ask(props: { conversation?: Conversation }) {
       actions={
         !question.data ? (
           <ActionPanel>
-            <FormInputActionSection
-              initialQuestion={question.data}
-              onSubmit={(question) => chats.ask(question, conversation.model)}
-              models={models.data}
-              selectedModel={selectedModelId}
-              onModelChange={setSelectedModelId}
-            />
             <PreferencesActionSection />
           </ActionPanel>
         ) : (
