@@ -1,10 +1,9 @@
-import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api";
+import { ActionPanel, Icon, List } from "@raycast/api";
 import { useState } from "react";
 import { DestructiveAction, PinAction } from "./actions";
 import { PreferencesActionSection } from "./actions/preferences";
 import { DEFAULT_MODEL, useModel } from "./hooks/useModel";
 import { Model } from "./type";
-import { ModelForm } from "./views/model/form";
 import { ModelListItem, ModelListView } from "./views/model/list";
 
 export default function Model() {
@@ -12,22 +11,8 @@ export default function Model() {
   const [searchText, setSearchText] = useState<string>("");
   const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
 
-  const { push } = useNavigation();
-
   const getActionPanel = (model: Model) => (
     <ActionPanel>
-      <Action
-        title={"Edit Model"}
-        shortcut={{ modifiers: ["cmd"], key: "t" }}
-        icon={Icon.Text}
-        onAction={() => push(<ModelForm model={model} use={{ models }} />)}
-      />
-      <Action
-        title={"Create Model"}
-        shortcut={{ modifiers: ["cmd"], key: "t" }}
-        icon={Icon.Text}
-        onAction={() => push(<ModelForm name={searchText} use={{ models }} />)}
-      />
       {model.id !== "default" && (
         <>
           <PinAction
