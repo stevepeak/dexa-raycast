@@ -40,38 +40,33 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
       setSelectedChatId(chat.id);
     }, 30);
 
-    // TODO squeeze the juice
-    await Gwiz
-      .ask(
-        {
-          messages: [...chatTransfomer(data, account.prompt), { role: "user", content: question }]
-        }
-      )
+    await Gwiz.ask({
+      messages: [...chatTransfomer(data), { role: "user", content: question }],
+      account,
+    })
       .then((res) => {
-        chat = { ...chat, answer: res.data.choices.map((x) => x.message)[0]?.content ?? "" };
-        if (typeof chat.answer === "string") {
-          setLoading(false);
-          clearSearchBar();
+        chat = { ...chat, answer: res.answer };
+        setLoading(false);
+        clearSearchBar();
 
-          toast.title = "Got your answer!";
-          toast.style = Toast.Style.Success;
+        toast.title = "Got your answer!";
+        toast.style = Toast.Style.Success;
 
-          if (isAutoTTS) {
-            say.stop();
-            say.speak(chat.answer);
-          }
-
-          setData((prev) => {
-            return prev.map((a) => {
-              if (a.id === chat.id) {
-                return chat;
-              }
-              return a;
-            });
-          });
-
-          history.add(chat);
+        if (isAutoTTS) {
+          say.stop();
+          say.speak(chat.answer);
         }
+
+        setData((prev) => {
+          return prev.map((a) => {
+            if (a.id === chat.id) {
+              return chat;
+            }
+            return a;
+          });
+        });
+
+        history.add(chat);
       })
       .catch((err) => {
         toast.title = "Error";
