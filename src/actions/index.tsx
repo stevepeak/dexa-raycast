@@ -27,7 +27,7 @@ export const TextToSpeechAction = ({ content }: { content: string }) => (
       say.stop();
       say.speak(content);
     }}
-    shortcut={{ modifiers: ["cmd"], key: "p" }}
+    shortcut={{ modifiers: ["cmd"], key: "f" }}
   />
 );
 
