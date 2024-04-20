@@ -50,7 +50,7 @@
       "description": "Enter your personal Open AI API",
       "type": "password",
       "title": "API",
-      "required": true
+      "required": false
     },
     {
       "name": "isAutoLoad",
