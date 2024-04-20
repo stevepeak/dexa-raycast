@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Chat, ChatHook, Model } from "../type";
 import { chatTransfomer } from "../utils";
 import { useAutoTTS } from "./useAutoTTS";
-import { useChatGPT } from "./useChatGPT";
+import { useGwiz } from "./useGwiz";
 import { useHistory } from "./useHistory";
 
 export function useChat<T extends Chat>(props: T[]): ChatHook {
@@ -16,7 +16,7 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
   const history = useHistory();
   const isAutoTTS = useAutoTTS();
 
-  const chatGPT = useChatGPT();
+  const Gwiz = useGwiz();
 
   async function ask(question: string, model: Model) {
     setLoading(true);
@@ -40,12 +40,10 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
       setSelectedChatId(chat.id);
     }, 30);
 
-    await chatGPT
-      .createChatCompletion(
+    await Gwiz
+      .ask(
         {
-          model: model.option,
-          temperature: model.temperature,
-          messages: [...chatTransfomer(data, model.prompt), { role: "user", content: question }],
+          messages: [...chatTransfomer(data, model.prompt), { role: "user", content: question }]
         }
       )
       .then((res) => {
