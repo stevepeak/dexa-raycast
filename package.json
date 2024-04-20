@@ -1,22 +1,15 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "chatgpt",
-  "title": "ChatGPT",
-  "description": "Interact with OpenAI's ChatGPT API directly from your command bar",
+  "name": "gwiz",
+  "title": "Gwiz",
+  "description": "Chat with your Gmail.",
   "icon": "icon.png",
-  "author": "abielzulio",
-  "contributors": [
-    "timolins",
-    "shichongrui",
-    "pomdtr"
-  ],
+  "author": "stevepeak",
+  "contributors": [],
   "categories": [
     "Applications",
     "Productivity",
-    "Developer Tools",
     "Web",
-    "Fun",
-    "Finance",
     "Other"
   ],
   "license": "MIT",
@@ -24,36 +17,29 @@
     {
       "name": "ask",
       "title": "Ask Question",
-      "subtitle": "ChatGPT",
-      "description": "Ask ChatGPT via Raycast",
+      "subtitle": "Gwiz",
+      "description": "Ask Gwiz via Raycast",
       "mode": "view"
     },
     {
       "name": "saved",
       "title": "Saved Answer",
-      "subtitle": "ChatGPT",
+      "subtitle": "Gwiz",
       "description": "Collection of your saved answer",
       "mode": "view"
     },
     {
       "name": "history",
       "title": "History",
-      "subtitle": "ChatGPT",
+      "subtitle": "Gwiz",
       "description": "Collection of your recent answer",
       "mode": "view"
     },
     {
       "name": "conversation",
       "title": "Conversations",
-      "subtitle": "ChatGPT",
+      "subtitle": "Gwiz",
       "description": "Collection of your recent conversation",
-      "mode": "view"
-    },
-    {
-      "name": "model",
-      "title": "Models",
-      "subtitle": "ChatGPT",
-      "description": "Collection of your custom and default model",
       "mode": "view"
     }
   ],
