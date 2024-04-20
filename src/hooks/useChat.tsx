@@ -2,7 +2,7 @@ import { clearSearchBar, showToast, Toast } from "@raycast/api";
 import { useCallback, useMemo, useState } from "react";
 import say from "say";
 import { v4 as uuidv4 } from "uuid";
-import { Chat, ChatHook, Model } from "../type";
+import { Chat, ChatHook, Account } from "../type";
 import { chatTransfomer } from "../utils";
 import { useAutoTTS } from "./useAutoTTS";
 import { useGwiz } from "./useGwiz";
@@ -18,7 +18,7 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
 
   const Gwiz = useGwiz();
 
-  async function ask(question: string, model: Model) {
+  async function ask(question: string, account: Account) {
     setLoading(true);
     const toast = await showToast({
       title: "Getting your answer...",
@@ -40,10 +40,11 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
       setSelectedChatId(chat.id);
     }, 30);
 
+    // TODO squeeze the juice
     await Gwiz
       .ask(
         {
-          messages: [...chatTransfomer(data, model.prompt), { role: "user", content: question }]
+          messages: [...chatTransfomer(data, account.prompt), { role: "user", content: question }]
         }
       )
       .then((res) => {

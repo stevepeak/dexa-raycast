@@ -5,15 +5,15 @@ import { PrimaryAction } from "./actions";
 import { PreferencesActionSection } from "./actions/preferences";
 import { useChat } from "./hooks/useChat";
 import { useConversations } from "./hooks/useConversations";
-import { DEFAULT_MODEL, useModel } from "./hooks/useModel";
+import { ALL_ACCOUNTS, useAccount } from "./hooks/useAccount";
 import { useQuestion } from "./hooks/useQuestion";
-import { Chat, Conversation, Model } from "./type";
+import { Chat, Conversation, Account } from "./type";
 import { ChatView } from "./views/chat";
-import { ModelDropdown } from "./views/model/dropdown";
+import { AccountDropdown } from "./views/accounts/dropdown";
 
 export default function Ask(props: { conversation?: Conversation }) {
   const conversations = useConversations();
-  const models = useModel();
+  const accounts = useAccount();
 
   const chats = useChat<Chat>(props.conversation ? props.conversation.chats : []);
   const question = useQuestion({ initialQuestion: "", disableAutoLoad: props.conversation ? true : false });
@@ -22,7 +22,7 @@ export default function Ask(props: { conversation?: Conversation }) {
     props.conversation ?? {
       id: uuidv4(),
       chats: [],
-      model: DEFAULT_MODEL,
+      account: ALL_ACCOUNTS,
       pinned: false,
       updated_at: "",
       created_at: new Date().toISOString(),
@@ -31,8 +31,8 @@ export default function Ask(props: { conversation?: Conversation }) {
 
   const [isLoading] = useState<boolean>(true);
 
-  const [selectedModelId, setSelectedModelId] = useState<string>(
-    props.conversation ? props.conversation.model.id : "default"
+  const [selectedAccountId, setSelectedAccountId] = useState<string>(
+    props.conversation ? props.conversation.account.id : "default"
   );
 
   useEffect(() => {
@@ -46,11 +46,11 @@ export default function Ask(props: { conversation?: Conversation }) {
   }, [conversation]);
 
   useEffect(() => {
-    if (models.data && conversation.chats.length === 0) {
-      const defaultUserModel = models.data.find((x) => x.id === DEFAULT_MODEL.id) ?? conversation.model;
-      setConversation({ ...conversation, model: defaultUserModel, updated_at: new Date().toISOString() });
+    if (accounts.data && conversation.chats.length === 0) {
+      const defaultUserAccount = accounts.data.find((x) => x.id === ALL_ACCOUNTS.id) ?? conversation.account;
+      setConversation({ ...conversation, account: defaultUserAccount, updated_at: new Date().toISOString() });
     }
-  }, [models.data]);
+  }, [accounts.data]);
 
   useEffect(() => {
     const updatedConversation = { ...conversation, chats: chats.data, updated_at: new Date().toISOString() };
@@ -58,17 +58,17 @@ export default function Ask(props: { conversation?: Conversation }) {
   }, [chats.data]);
 
   useEffect(() => {
-    const selectedModel = models.data.find((x) => x.id === selectedModelId);
+    const selectedAccount = accounts.data.find((x) => x.id === selectedAccountId);
     setConversation({
       ...conversation,
-      model: selectedModel ?? { ...conversation.model },
+      account: selectedAccount ?? { ...conversation.account },
       updated_at: new Date().toISOString(),
     });
-  }, [selectedModelId]);
+  }, [selectedAccountId]);
 
-  const getActionPanel = (question: string, model: Model) => (
+  const getActionPanel = (question: string, account: Account) => (
     <ActionPanel>
-      <PrimaryAction title="Get Answer" onAction={() => chats.ask(question, model)} />
+      <PrimaryAction title="Get Answer" onAction={() => chats.ask(question, account)} />
       <PreferencesActionSection />
     </ActionPanel>
   );
@@ -88,12 +88,12 @@ export default function Ask(props: { conversation?: Conversation }) {
             <PreferencesActionSection />
           </ActionPanel>
         ) : (
-          getActionPanel(question.data, conversation.model)
+          getActionPanel(question.data, conversation.account)
         )
       }
       selectedItemId={chats.selectedChatId || undefined}
       searchBarAccessory={
-        <ModelDropdown models={models.data} onModelChange={setSelectedModelId} selectedModel={selectedModelId} />
+        <AccountDropdown accounts={accounts.data} onAccountChange={setSelectedAccountId} selectedAccount={selectedAccountId} />
       }
       onSelectionChange={(id) => {
         if (id !== chats.selectedChatId) {
@@ -107,10 +107,10 @@ export default function Ask(props: { conversation?: Conversation }) {
         question={question.data}
         setConversation={setConversation}
         use={{ chats }}
-        model={conversation.model}
-        models={models.data}
-        selectedModel={selectedModelId}
-        onModelChange={setSelectedModelId}
+        account={conversation.account}
+        accounts={accounts.data}
+        selectedAccount={selectedAccountId}
+        onAccountChange={setSelectedAccountId}
       />
     </List>
   );

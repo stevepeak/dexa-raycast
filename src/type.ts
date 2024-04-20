@@ -20,21 +20,16 @@ export interface SavedChat extends Chat {
 
 export interface Conversation {
   id: string;
-  model: Model;
+  account: Account;
   chats: Chat[];
   updated_at: string;
   created_at: string;
   pinned: boolean;
 }
 
-export interface Model {
+export interface Account {
   id: string;
-  updated_at: string;
-  created_at: string;
   name: string;
-  prompt: string;
-  option: "gpt-3.5-turbo" | "gpt-3.5-turbo-0301" | string;
-  temperature: number;
   pinned: boolean;
 }
 
@@ -53,20 +48,17 @@ interface BaseHook<T> {
   isLoading: boolean;
 }
 
-type Hook<T> = BaseHook<T[]> & BaseFunctionHook<T>;
+type CruddableHook<T> = BaseHook<T[]> & BaseFunctionHook<T>;
 
-export type HistoryHook = Hook<Chat>;
+export type HistoryHook = CruddableHook<Chat>;
 
-export type SavedChatHook = Hook<SavedChat>;
+export type SavedChatHook = CruddableHook<SavedChat>;
 
-export type ConversationsHook = Hook<Conversation> & { update: PromiseFunctionWithOneArg<Conversation> };
+export type ConversationsHook = CruddableHook<Conversation> & { update: PromiseFunctionWithOneArg<Conversation> };
 
 export type QuestionHook = BaseHook<string> & { update: PromiseFunctionWithOneArg<string> };
 
-export type ModelHook = Hook<Model> & {
-  update: PromiseFunctionWithOneArg<Model>;
-  option: Model["option"][];
-};
+export type AccountHook = BaseHook<Account[]>;
 
 export interface ChatHook {
   data: Chat[];
@@ -75,25 +67,25 @@ export interface ChatHook {
   setLoading: Set<boolean>;
   selectedChatId: string | null;
   setSelectedChatId: Set<string | null>;
-  ask: PromiseFunctionWithTwoArg<string, Model>;
+  ask: PromiseFunctionWithTwoArg<string, Account>;
   clear: PromiseFunctionNoArg;
 }
 
-export interface ChangeModelProp {
-  models: Model[];
-  selectedModel: string;
-  onModelChange: Set<string>;
+export interface ChangeAccountProp {
+  accounts: Account[];
+  selectedAccount: string;
+  onAccountChange: Set<string>;
 }
 
-export interface QuestionFormProps extends ChangeModelProp {
+export interface QuestionFormProps extends ChangeAccountProp {
   initialQuestion: string;
   onSubmit: (question: string) => void;
 }
 
-export interface ChatViewProps extends ChangeModelProp {
+export interface ChatViewProps extends ChangeAccountProp {
   data: Chat[];
   question: string;
-  model: Model;
+  account: Account;
   setConversation: Set<Conversation>;
   use: { chats: ChatHook };
 }

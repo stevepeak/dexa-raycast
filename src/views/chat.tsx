@@ -4,7 +4,7 @@ import { DestructiveAction, PrimaryAction, TextToSpeechAction } from "../actions
 import { CopyActionSection } from "../actions/copy";
 import { PreferencesActionSection } from "../actions/preferences";
 import { SaveActionSection } from "../actions/save";
-import { DEFAULT_MODEL } from "../hooks/useModel";
+import { ALL_ACCOUNTS } from "../hooks/useAccount";
 import { useSavedChat } from "../hooks/useSavedChat";
 import { Chat, ChatViewProps } from "../type";
 import { AnswerDetailView } from "./answer-detail";
@@ -13,7 +13,7 @@ import { EmptyView } from "./empty";
 export const ChatView = ({
   data,
   question,
-  model,
+  account,
   setConversation,
   use,
 }: ChatViewProps) => {
@@ -24,7 +24,7 @@ export const ChatView = ({
   const getActionPanel = (selectedChat: Chat) => (
     <ActionPanel>
       {question.length > 0 ? (
-        <PrimaryAction title="Get Answer" onAction={() => use.chats.ask(question, model)} />
+        <PrimaryAction title="Get Answer" onAction={() => use.chats.ask(question, account)} />
       ) : selectedChat.answer && use.chats.selectedChatId === selectedChat.id ? (
         <>
           <CopyActionSection answer={selectedChat.answer} question={selectedChat.question} />
@@ -47,7 +47,7 @@ export const ChatView = ({
               setConversation({
                 id: uuidv4(),
                 chats: [],
-                model: DEFAULT_MODEL,
+                account: ALL_ACCOUNTS,
                 pinned: false,
                 updated_at: "",
                 created_at: new Date().toISOString(),

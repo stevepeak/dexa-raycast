@@ -18,7 +18,7 @@ export const ConversationListView = (props: {
           title={conversation.chats[conversation.chats.length - 1].question}
           accessories={[
             { text: conversation.chats[conversation.chats.length - 1].answer },
-            { tag: conversation.model.name },
+            { tag: conversation.account.name },
             { text: new Date(conversation.created_at ?? 0).toLocaleDateString() },
           ]}
           actions={conversation && selectedConversation === conversation.id ? actionPanel(conversation) : undefined}
