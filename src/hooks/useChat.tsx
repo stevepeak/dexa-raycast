@@ -7,7 +7,6 @@ import { chatTransfomer } from "../utils";
 import { useAutoTTS } from "./useAutoTTS";
 import { useChatGPT } from "./useChatGPT";
 import { useHistory } from "./useHistory";
-import { useProxy } from "./useProxy";
 
 export function useChat<T extends Chat>(props: T[]): ChatHook {
   const [data, setData] = useState<Chat[]>(props);
@@ -16,7 +15,6 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
 
   const history = useHistory();
   const isAutoTTS = useAutoTTS();
-  const proxy = useProxy();
 
   const chatGPT = useChatGPT();
 
@@ -48,9 +46,6 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
           model: model.option,
           temperature: model.temperature,
           messages: [...chatTransfomer(data, model.prompt), { role: "user", content: question }],
-        },
-        {
-          proxy,
         }
       )
       .then((res) => {
