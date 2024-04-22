@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Chat, ChatHook, Account } from "../type";
 import { chatTransfomer } from "../utils";
 import { useAutoTTS } from "./useAutoTTS";
-import { useGwiz } from "./useGwiz";
+import { useDexa } from "./useDexa";
 import { useHistory } from "./useHistory";
 
 export function useChat<T extends Chat>(props: T[]): ChatHook {
@@ -16,7 +16,7 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
   const history = useHistory();
   const isAutoTTS = useAutoTTS();
 
-  const Gwiz = useGwiz();
+  const Dexa = useDexa();
 
   async function ask(question: string, account: Account) {
     setLoading(true);
@@ -40,7 +40,7 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
       setSelectedChatId(chat.id);
     }, 30);
 
-    await Gwiz.ask({
+    await Dexa.ask({
       messages: [...chatTransfomer(data), { role: "user", content: question }],
       account,
     })

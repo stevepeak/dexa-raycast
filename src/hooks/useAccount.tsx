@@ -16,9 +16,9 @@ export function useAccount(): AccountHook {
     (async () => {
       setLoading(true);
 
-      // TODO change this to use the Gwiz API when you register or refresh account
+      // TODO when we want accounts
       // const storedAccounts = await LocalStorage.getItem<string>("accounts");
-      const storedAccounts = '[{"id":"1234","name":"steve@gwiz.ai","pinned":false}]'
+      const storedAccounts = null
 
       if (!storedAccounts) {
         setData([ALL_ACCOUNTS]);
