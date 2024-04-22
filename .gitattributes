@@ -1,0 +1,3 @@
+*.mts linguist-generated
+packages/edgedb/dbschema/interfaces.ts linguist-generated
+packages/edgedb/dbschema/queries.ts linguist-generated
